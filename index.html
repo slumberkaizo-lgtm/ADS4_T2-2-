@@ -1,551 +1,981 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Архив Конспектов</title>
-    <style>
-        :root {
-            --bg-dark: #121214;
-            --bg-panel: #1a1a1e;
-            --bg-accent: #2a2a32;
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --accent-color: #6366f1;
-            --accent-hover: #4f46e5;
-            --border-color: #2e2e38;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>История Казахстана — Курс лекций</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #191d28;
+    --border: #252a38;
+    --gold: #c9a84c;
+    --gold2: #e8c97a;
+    --text: #d6cebc;
+    --muted: #7a7666;
+    --accent: #4a8fa8;
+    --accent2: #6bb8d4;
+  }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding: 20px;
-        }
+  html { scroll-behavior: smooth; }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
 
-        header {
-            margin-bottom: 25px;
-            text-align: center;
-        }
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, #0d1118 0%, #111420 40%, #0c1019 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 40px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,.07) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 80% 100%, rgba(74,143,168,.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-ornament {
+    font-size: 11px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: .7;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: #e8e0cc;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--gold2); }
+  .hero p {
+    max-width: 560px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: .95rem;
+    letter-spacing: .02em;
+  }
+  .hero-line {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 28px auto 0;
+  }
 
-        header h1 {
-            font-size: 2rem;
-            color: #fff;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
+  /* ── LAYOUT ── */
+  .container { display: flex; min-height: calc(100vh - 220px); }
 
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 5px;
-        }
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 32px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .sidebar::-webkit-scrollbar { width: 3px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .sidebar-title {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 28px 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .tab-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 13px 28px;
+    text-align: left;
+    transition: background .2s, border-color .2s;
+    border-left: 2px solid transparent;
+    position: relative;
+  }
+  .tab-btn:hover { background: var(--surface2); }
+  .tab-btn.active {
+    background: var(--surface2);
+    border-left-color: var(--gold);
+  }
+  .tab-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    opacity: .5;
+    min-width: 22px;
+    line-height: 1.4;
+    transition: opacity .2s;
+  }
+  .tab-btn.active .tab-num,
+  .tab-btn:hover .tab-num { opacity: 1; }
+  .tab-label {
+    font-size: .78rem;
+    color: var(--muted);
+    line-height: 1.4;
+    font-weight: 400;
+    transition: color .2s;
+  }
+  .tab-btn.active .tab-label,
+  .tab-btn:hover .tab-label { color: var(--text); }
 
-        /* Табы / Вкладки */
-        .tabs-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            background-color: var(--bg-panel);
-            padding: 8px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
+  /* ── CONTENT AREA ── */
+  .content-area {
+    flex: 1;
+    padding: 52px clamp(24px, 5vw, 72px);
+    max-width: 900px;
+    min-width: 0;
+  }
 
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 10px 16px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
+  .lecture { display: none; animation: fadeIn .35s ease; }
+  .lecture.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        .tab-btn:hover {
-            color: #fff;
-            background-color: var(--bg-accent);
-        }
+  .lec-header { margin-bottom: 48px; }
+  .lec-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem;
+    font-weight: 600;
+    color: var(--gold);
+    opacity: .12;
+    line-height: 1;
+    margin-bottom: -20px;
+    display: block;
+    user-select: none;
+  }
+  .lec-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 600;
+    color: #e8e0cc;
+    line-height: 1.25;
+  }
+  .lec-divider {
+    width: 48px; height: 1px;
+    background: var(--gold);
+    margin: 18px 0 0;
+  }
 
-        .tab-btn.active {
-            color: #fff;
-            background-color: var(--accent-color);
-        }
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 52px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--gold2);
+    letter-spacing: .03em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 4px; height: 18px;
+    background: var(--gold);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
 
-        /* Панели с контентом */
-        .content-panel {
-            display: none;
-            background-color: var(--bg-panel);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            padding: 35px;
-            animation: fadeIn 0.3s ease;
-        }
+  /* ── TERM CARDS ── */
+  .terms-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .term-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    transition: border-color .2s, background .2s;
+  }
+  .term-card:hover { border-color: rgba(201,168,76,.35); background: var(--surface2); }
+  .term-name {
+    font-weight: 500;
+    color: var(--gold2);
+    font-size: .9rem;
+    margin-bottom: 5px;
+    letter-spacing: .01em;
+  }
+  .term-def {
+    font-size: .875rem;
+    color: #9e9788;
+    line-height: 1.65;
+  }
 
-        .content-panel.active {
-            display: block;
-        }
+  /* ── PERSONS ── */
+  .persons-list { display: grid; gap: 10px; }
+  .person-row {
+    display: flex;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: border-color .2s;
+  }
+  .person-row:hover { border-color: rgba(74,143,168,.4); }
+  .person-icon {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, #1a2230, #252d3e);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: .85rem;
+    color: var(--accent2);
+    border: 1px solid var(--border);
+  }
+  .person-name {
+    font-weight: 500;
+    font-size: .88rem;
+    color: var(--accent2);
+    margin-bottom: 3px;
+  }
+  .person-desc {
+    font-size: .84rem;
+    color: #8a8577;
+    line-height: 1.6;
+  }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 6px; bottom: 6px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold), var(--border) 80%);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 16px;
+    padding-left: 4px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -26px; top: 7px;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--bg);
+    opacity: .7;
+  }
+  .tl-date {
+    font-size: .78rem;
+    color: var(--gold);
+    letter-spacing: .04em;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .tl-event {
+    font-size: .875rem;
+    color: #9e9788;
+    line-height: 1.6;
+  }
 
-        /* Стилизация внутренностей конспекта */
-        .lecture-title {
-            font-size: 1.6rem;
-            color: #fff;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
+  /* ── CONTENT BLOCKS ── */
+  .content-block {
+    margin-bottom: 28px;
+  }
+  .block-title {
+    font-size: .9rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: .01em;
+  }
+  .block-text {
+    font-size: .875rem;
+    color: #8f8b7e;
+    line-height: 1.75;
+  }
+  .block-text ul { padding-left: 18px; }
+  .block-text li { margin-bottom: 6px; }
+  .block-text strong { color: #b8b09c; font-weight: 500; }
 
-        .section-title {
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            margin: 25px 0 15px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
+  /* ── QUOTES ── */
+  .quote-block {
+    border-left: 2px solid var(--gold);
+    padding: 14px 20px;
+    background: rgba(201,168,76,.04);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 14px;
+    font-size: .88rem;
+    color: #9e9788;
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .quote-source {
+    font-size: .78rem;
+    color: var(--gold);
+    font-style: normal;
+    margin-top: 6px;
+    display: block;
+  }
 
-        .section-title:first-of-type {
-            margin-top: 0;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        li {
-            margin-bottom: 16px;
-            padding-left: 12px;
-            border-left: 2px solid var(--border-color);
-            transition: border-color 0.2s;
-        }
-
-        li:hover {
-            border-left-color: var(--accent-color);
-        }
-
-        li strong {
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .nested-list {
-            margin-top: 8px;
-            margin-left: 15px;
-        }
-
-        .nested-list li {
-            font-size: 0.95rem;
-            margin-bottom: 6px;
-            border-left: none;
-            padding-left: 0;
-            list-style: disc;
-        }
-
-        .nested-list li:hover {
-            border-left-color: transparent;
-        }
-
-        hr {
-            border: 0;
-            height: 1px;
-            background: var(--border-color);
-            margin: 30px 0;
-        }
-    </style>
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .container { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      min-width: unset;
+      height: auto;
+      position: static;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      overflow-x: auto;
+      white-space: nowrap;
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    .sidebar-title { display: none; }
+    .tab-btn {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 18px;
+      border-left: none;
+      border-bottom: 2px solid transparent;
+      white-space: normal;
+      min-width: 110px;
+    }
+    .tab-btn.active { border-bottom-color: var(--gold); border-left-color: transparent; }
+    .content-area { padding: 32px 20px; }
+  }
+</style>
 </head>
 <body>
 
+<div class="hero">
+  <span class="hero-ornament">Курс лекций · История Казахстана</span>
+  <h1>От древности до<br><span>Независимого Казахстана</span></h1>
+  <p>10 лекций по истории казахского народа — от антропогенеза до современной внешней политики государства</p>
+  <div class="hero-line"></div>
+</div>
+
 <div class="container">
-    <header>
-        <h1>База Знаний</h1>
-        <p>Удобный просмотр структурированных лекций и гайдлайнов</p>
-    </header>
 
-    <!-- Вкладки (названия точно как у файлов) -->
-    <div class="tabs-container">
-        <button class="tab-btn active" onclick="openTab(event, 'Lecture1')">Lecture 1.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture2')">Lecture 2.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture3')">Lecture 3.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture4')">Lecture 4.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture5')">Lecture 5.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture6')">Lecture 6.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture7')">Lecture 7.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture8')">Lecture 8.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture9')">Lecture 9.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Lecture10')">Lecture 10.txt</button>
-        <button class="tab-btn" onclick="openTab(event, 'Netiquete')">Netiquete.txt</button>
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-title">Навигация</div>
+    <button class="tab-btn active" onclick="show(1)"><span class="tab-num">01</span><span class="tab-label">Казахстан в древности. Кочевая цивилизация</span></button>
+    <button class="tab-btn" onclick="show(2)"><span class="tab-num">02</span><span class="tab-label">Тюркская эпоха (VI–XII вв.)</span></button>
+    <button class="tab-btn" onclick="show(3)"><span class="tab-num">03</span><span class="tab-label">Монгольская эпоха и Казахское ханство</span></button>
+    <button class="tab-btn" onclick="show(4)"><span class="tab-num">04</span><span class="tab-label">Казахстан в составе Российской империи</span></button>
+    <button class="tab-btn" onclick="show(5)"><span class="tab-num">05</span><span class="tab-label">Национально-освободительная борьба</span></button>
+    <button class="tab-btn" onclick="show(6)"><span class="tab-num">06</span><span class="tab-label">Движение «Алаш»</span></button>
+    <button class="tab-btn" onclick="show(7)"><span class="tab-num">07</span><span class="tab-label">Советская модернизация</span></button>
+    <button class="tab-btn" onclick="show(8)"><span class="tab-num">08</span><span class="tab-label">Советские реформы и Перестройка</span></button>
+    <button class="tab-btn" onclick="show(9)"><span class="tab-num">09</span><span class="tab-label">Возрождение государственности (1991–2020-е)</span></button>
+    <button class="tab-btn" onclick="show(10)"><span class="tab-num">10</span><span class="tab-label">Внешняя политика РК</span></button>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content-area">
+
+    <!-- ══ ЛЕКЦИЯ 1 ══ -->
+    <div class="lecture active" id="lec-1">
+      <div class="lec-header">
+        <span class="lec-num">01</span>
+        <h2 class="lec-title">Казахстан в древности. Предыстория эволюции человека и формирование кочевой цивилизации</h2>
+        <div class="lec-divider"></div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Антропогенез</div><div class="term-def">Сложный процесс выделения человека из животного мира, основанный на теории Дарвина.</div></div>
+          <div class="term-card"><div class="term-name">Линейная модель эволюции</div><div class="term-def">Теория о последовательной смене одного вида людей другим: Австралопитек → Питекантроп → Палеоантроп (Неандерталец) → Кроманьонец.</div></div>
+          <div class="term-card"><div class="term-name">Теория множественности видов</div><div class="term-def">Гипотеза о том, что до 8-го тысячелетия до н.э. одновременно существовало не менее шести видов людей: Австралопитек, Homo neanderthalensis, Homo soloensis, Homo erectus, Homo denisova и Homo sapiens.</div></div>
+          <div class="term-card"><div class="term-name">Когнитивная революция</div><div class="term-def">Период развития умственных способностей Homo sapiens (мышление, общение, язык), позволивший им доминировать над экосистемами. Факторы: большой мозг, орудия, обучаемость, социальные структуры, огонь.</div></div>
+          <div class="term-card"><div class="term-name">Каменный век</div><div class="term-def">Древнейший период в истории (ок. 2,5 млн лет назад — 3-е тыс. до н.э.), характеризующийся использованием камня как основного материала для орудий.</div></div>
+          <div class="term-card"><div class="term-name">Неолитическая революция</div><div class="term-def">Переход от присваивающего хозяйства (охота, собирательство) к производящему (земледелие, скотоводство).</div></div>
+          <div class="term-card"><div class="term-name">Ботайская культура</div><div class="term-def">Археологическая культура энеолита (3–2 тыс. до н.э.) в Северном Казахстане. Место древнейшего одомашнивания лошади.</div></div>
+          <div class="term-card"><div class="term-name">Андроновская культура</div><div class="term-def">Крупнейшая культурно-историческая общность эпохи бронзы в Евразии (начало 2-го тыс. до н.э.), один из главных центров которой находился в Казахстане.</div></div>
+          <div class="term-card"><div class="term-name">Саки</div><div class="term-def">Кочевные племена раннего железного века (I тыс. до н.э.), этнокультурные преемники андроновцев.</div></div>
+          <div class="term-card"><div class="term-name">«Звериный стиль»</div><div class="term-def">Уникальное искусство саков (VII–VI вв. до н.э.), изображающее животных и сцены борьбы зверей в динамике.</div></div>
+          <div class="term-card"><div class="term-name">Полихромный стиль</div><div class="term-def">Стиль гуннского ювелирного искусства, характеризующийся вставками из цветных камней, зернью, сканью и эмалью.</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">Д</div><div><div class="person-name">Чарльз Дарвин</div><div class="person-desc">Автор эволюционной теории, связавший происхождение человека с развитием человекообразных обезьян и естественным отбором.</div></div></div>
+          <div class="person-row"><div class="person-icon">Х</div><div><div class="person-name">Юваль Ной Харари</div><div class="person-desc">Исследователь, описавший роль когнитивной революции как фундаментального фактора доминирования Homo sapiens над другими видами.</div></div></div>
+          <div class="person-row"><div class="person-icon">З</div><div><div class="person-name">В.Ф. Зайберт</div><div class="person-desc">Археолог, доказавший факт одомашнивания лошади на территории Казахстана около 5500 лет назад (Ботайская культура).</div></div></div>
+          <div class="person-row"><div class="person-icon">А</div><div><div class="person-name">А.Х. Маргулан</div><div class="person-desc">Основоположник казахстанской археологической школы. Открыл памятники Бегазы-Дандыбаевской культуры.</div></div></div>
+          <div class="person-row"><div class="person-icon">А</div><div><div class="person-name">К.А. Акишев</div><div class="person-desc">Открыл в 1969 году «Золотого человека» в кургане Иссык — мировое научное событие.</div></div></div>
+          <div class="person-row"><div class="person-icon">Т</div><div><div class="person-name">Царица Томирис</div><div class="person-desc">Легендарная правительница саков (массагетов), разгромившая армию персидского царя Кира Великого в 530 г. до н.э.</div></div></div>
+          <div class="person-row"><div class="person-icon">М</div><div><div class="person-name">Модэ (Матэ) Шаньюй (209–174 гг. до н.э.)</div><div class="person-desc">Основатель могущества державы гуннов, объединивший разрозненные племена Центральной Азии и заставивший Китай платить дань.</div></div></div>
+          <div class="person-row"><div class="person-icon">А</div><div><div class="person-name">Аттила (434–453 гг. н.э.)</div><div class="person-desc">Верховный вождь гуннов, создавший огромную империю от Волги до Рейна. Прозван «Бичом Божьим».</div></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">Ок. 2,5 млн лет назад</div><div class="tl-event">Начало каменного века.</div></div>
+          <div class="tl-item"><div class="tl-date">Ок. 1 млн лет назад</div><div class="tl-event">Проникновение первых древних людей (Homo erectus) на территорию Казахстана.</div></div>
+          <div class="tl-item"><div class="tl-date">Ок. 70 000 лет назад</div><div class="tl-event">Начало когнитивной революции Homo sapiens.</div></div>
+          <div class="tl-item"><div class="tl-date">3–2 тыс. до н.э.</div><div class="tl-event">Энеолит (Ботайская культура): древнейшее одомашнивание лошади в Северном Казахстане.</div></div>
+          <div class="tl-item"><div class="tl-date">Начало 2-го тыс. до н.э.</div><div class="tl-event">Изобретение бронзы, распространение Андроновской культуры.</div></div>
+          <div class="tl-item"><div class="tl-date">IX – III вв. до н.э.</div><div class="tl-event">Эпоха саков (ранний железный век).</div></div>
+          <div class="tl-item"><div class="tl-date">530 г. до н.э.</div><div class="tl-event">Победа царицы Томирис над персидским царем Киром II.</div></div>
+          <div class="tl-item"><div class="tl-date">209–174 гг. до н.э.</div><div class="tl-event">Правление Модэ Шаньюя: создание гуннской империи.</div></div>
+          <div class="tl-item"><div class="tl-date">451 г. н.э.</div><div class="tl-event">Битва на Каталаунских полях. Гунны Аттилы против коалиции Рима и германцев.</div></div>
+          <div class="tl-item"><div class="tl-date">453 г. н.э.</div><div class="tl-event">Смерть Аттилы, начало распада гуннской империи.</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Содержание</h3>
+        <div class="content-block">
+          <div class="block-title">Каменный век в Казахстане</div>
+          <div class="block-text"><p><strong>Палеолит:</strong> Орудия типа рубил и скребел (Борыказган, Танирказган). В среднем палеолите — использование огня, охота и собирательство. В позднем — возникновение рода, матриархат, петроглифы (более 130 крупных скоплений в РК) и верования в загробную жизнь.</p><br><p><strong>Мезолит:</strong> Переход к современному климату, исчезновение мамонтов. Изобретение лука, стрел, бумеранга. Появление микролитов.</p><br><p><strong>Неолит:</strong> Культуры — Атбасарская (Север), Маханджарская (Центр), Кельтеминарская (Запад). Изобретение ткачества, горного дела, гончарства.</p></div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Эпоха металлов</div>
+          <div class="block-text"><p><strong>Ботайская культура:</strong> Одомашнивание лошади доказано по остаткам костей и следам кумыса на керамике. Лошадь стала фактором мобильности и развития кочевого скотоводства.</p><br><p><strong>Андроновская культура:</strong> Комплексная экономика — скотоводство (лошади, овцы, коровы) и земледелие. Добыча меди в Жезказгане, олова в горах Атасу. Петроглифы Тамгалы (список ЮНЕСКО). Переход от матриархата к патриархату.</p></div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Ранние государства и кочевые империи</div>
+          <div class="block-text"><p><strong>Саки:</strong> Группы — саки-парадарайя, саки-тиграхауда, саки-хаумаварга, аримаспы. Верования в небо, солнце и огонь (зороастризм). «Золотой человек» (курган Иссык) — символ высокой цивилизации.</p><br><p><strong>Гунны:</strong> Основная сила — конница с мощными луками. Тактика внезапных налетов. Вытеснили готов, вандалов и аланов, что привело к падению Римской империи. Первая кочевая империя Евразии.</p><br><p><strong>Усуни и Каньгюи:</strong> Усуни занимали Жетысу, развитая городская культура (столица Чигучен). Каньгюи контролировали Великий Шёлковый путь в Сырдарьинской долине.</p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Цитаты и замечания</h3>
+        <div class="quote-block">«В течение долгого времени историки считали кочевые культуры отсталыми. Но сегодня мы используем цивилизационный подход, который показывает, что степная цивилизация была очень развитой».<span class="quote-source">— Из материалов курса</span></div>
+        <div class="quote-block">«Они словно приросли к своим коням... на них они покупают и продают, едят и пьют».<span class="quote-source">— Аммиан Марцеллин о гуннах</span></div>
+      </div>
     </div>
 
-    <!-- Контент -->
+    <!-- ══ ЛЕКЦИЯ 2 ══ -->
+    <div class="lecture" id="lec-2">
+      <div class="lec-header">
+        <span class="lec-num">02</span>
+        <h2 class="lec-title">Тюркская эпоха на территории Казахстана (VI–XII вв.)</h2>
+        <div class="lec-divider"></div>
+      </div>
 
-    <!-- Lecture 1.txt -->
-    <div id="Lecture1" class="content-panel active">
-        <div class="lecture-title">Лекция 1: Введение в культурологию. Морфология культуры</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Культура (общее определение)</strong> — совокупность нематериальных аспектов социальной жизни, включая ценности, убеждения, язык и практики. С антропологической точки зрения — это весь спектр усвоенных паттернов человеческого поведения.</li>
-            <li><strong>Cultura animi</strong> (лат. «возделывание души») — термин, введенный Цицероном; метафора, описывающая развитие философского мышления как высшей цели человеческой жизни.</li>
-            <li><strong>Ментифакты (Mentifacts)</strong> — ментальные проявления, идеологическая подсистема культуры: идеи, верования, знания.</li>
-            <li><strong>Социофакты (Sociofacts)</strong> — социологическая подсистема: способы взаимодействия людей, семейные структуры, правовые системы.</li>
-            <li><strong>Артефакты (Artifacts)</strong> — технологическая подсистема: материальные объекты, инструменты, одежда, архитектура.</li>
-            <li><strong>Морфология культуры</strong> — раздел культурологии, изучающий структуру культуры как социального феномена, её составные части и процессы их формирования.</li>
-            <li><strong>Материальная культура</strong> — физические, осязаемые объекты, созданные человеком (инструменты, здания, книги).</li>
-            <li><strong>Духовная (нематериальная) культура</strong> — неосязаемые и абстрактные объекты: обычаи, традиции, верования, язык, ценности.</li>
-            <li><strong>Цивилизация</strong> — внешнее проявление общества (технологии, инфраструктура, social institutions), в то время как культура является его внутренним характером (ценности, мораль).</li>
-            <li><strong>Синкретизм</strong> — неразрывное единство физической и метафизической сфер, характерное для ранних обществ, где человек не отделял себя от природы.</li>
-            <li><strong>Мем (Meme)</strong> — единица культурной трансляции, имитации или репликации; культурный аналог гена.</li>
-            <li><strong>Элитарная (Высокая) культура</strong> — формы художественного и интеллектуального выражения, доступные образованному меньшинству (опера, классическая музыка, философия).</li>
-            <li><strong>Массовая культура</strong> — коммерческие продукты, созданные для массового потребления через СМИ (поп-музыка, TikTok, мода).</li>
-            <li><strong>Народная (Фолк) культура</strong> — традиционные обычаи и практики, передаваемые из поколения в поколение, особенно в сельских или коренных общинах.</li>
-            <li><strong>Экологическая культура</strong> — этические и поведенческие нормы взаимодействия человека с окружающей средой.</li>
-            <li><strong>Цифровая культура</strong> — практики, нормы и формы коммуникации, возникшие благодаря интернет-технологиям.</li>
-            <li><strong>Гипотеза Сепира-Уорфа</strong> — концепция, согласно которой язык влияет на мышление и восприятие реальности (разные языки по-разному категоризируют мир).</li>
-        </ul>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Тюркский каганат (552–603 гг.)</div><div class="term-def">Первая трансконтинентальная империя Евразии, объединившая земли от Корейского полуострова до Каспийского моря.</div></div>
+          <div class="term-card"><div class="term-name">Ашина</div><div class="term-def">Правящий род тюрков. Согласно легенде, родоначальник клана был сыном волчицы.</div></div>
+          <div class="term-card"><div class="term-name">Каган</div><div class="term-def">Высший титул правителя тюркского государства, верховный судья и главнокомандующий.</div></div>
+          <div class="term-card"><div class="term-name">Он Ок Эль («Государство десяти стрел»)</div><div class="term-def">Военно-административная система Западно-Тюркского каганата, где каждая «стрела» соответствовала отдельному племенному объединению.</div></div>
+          <div class="term-card"><div class="term-name">Атлахская (Таласская) битва (751 г.)</div><div class="term-def">Сражение на реке Талас, где объединённые силы арабов и карлуков разгромили армию китайской империи Тан. Остановило продвижение Китая на запад на многие века.</div></div>
+          <div class="term-card"><div class="term-name">Дешт-и Кыпчак</div><div class="term-def">«Степь кыпчаков» — обширный историко-географический регион от Алтая до Дуная. В русских летописях — половцы, в европейских — куманы.</div></div>
+          <div class="term-card"><div class="term-name">Государство Караханидов (942–1212 гг.)</div><div class="term-def">Первая крупная тюркская династия, официально принявшая ислам как государственную религию.</div></div>
+          <div class="term-card"><div class="term-name">Орхоно-енисейская письменность</div><div class="term-def">Древнетюркское руническое письмо, использовавшееся для официальных документов и памятных надписей.</div></div>
+          <div class="term-card"><div class="term-name">Тюргешский каганат (699–756 гг.)</div><div class="term-def">Государство в Жетысу, возникшее на руинах Западного каганата и ставшее щитом против арабской экспансии.</div></div>
+        </div>
+      </div>
 
-        <hr>
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">Б</div><div><div class="person-name">Бумын каган</div><div class="person-desc">Основатель Тюркского каганата; в 552 г. разгромил жужаней, объединил тюркские племена и принял титул «иль-хан».</div></div></div>
+          <div class="person-row"><div class="person-icon">М</div><div><div class="person-name">Мукан каган (553–572 гг.)</div><div class="person-desc">При нём каганат достиг расцвета; покорил киданей и енисейских кыргызов, превратив Китай в данника тюрков.</div></div></div>
+          <div class="person-row"><div class="person-icon">И</div><div><div class="person-name">Истеми ябгу</div><div class="person-desc">Руководил великим походом на запад; разгромил эфталитов в союзе с Ираном и установил дипломатические отношения с Византией.</div></div></div>
+          <div class="person-row"><div class="person-icon">С</div><div><div class="person-name">Сулук каган (715–738 гг.)</div><div class="person-desc">Выдающийся правитель тюргешей, известный у арабов как «Абу Музахим» (Пронзающий). Успешно противостоял арабской экспансии.</div></div></div>
+          <div class="person-row"><div class="person-icon">С</div><div><div class="person-name">Сатук Богра-хан</div><div class="person-desc">Основатель династии Караханидов; первым из тюркских правителей тайно принял ислам.</div></div></div>
+        </div>
+      </div>
 
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Цицерон (Марк Туллий)</strong> — римский философ, впервые использовал термин «культура» в философском контексте, введя понятие <em>cultura animi</em> (возделывание души).</li>
-            <li><strong>Лесли Алвин Уайт</strong> — американский антрополог, ввел термин «культурология» (cultural studies) как отдельную науку о культуре.</li>
-            <li><strong>Эдуард Бернетт Тайлор</strong> — основоположник антропологии; в 1871 году дал классическое определение культуры как «сложного целого», включающего знания, верования, искусство, право и мораль.</li>
-            <li><strong>Альфред Крёбер и Клайд Клакхон</strong> — в 1952 году проанализировали более 200 определений культуры, выделив 8 категорий (историческую, поведенческую, нормативную и др.).</li>
-            <li><strong>Клиффорд Гирц и Виктор Тёрнер</strong> — представители символической теории; рассматривали культуру как «текст», который нужно интерпретировать, и как «паутину смыслов», которую человек плетет сам.</li>
-            <li><strong>Ричард Докинз</strong> — биолог и теоретик; ввел понятие «мем» (1976), утверждая, что идеи эволюционируют подобно генам через естественный отбор.</li>
-            <li><strong>Джулиан Хаксли</strong> — биолог; разделил культуру на три взаимосвязанные подсистемы: ментифакты, социофакты и артефакты.</li>
-            <li><strong>Просветители (Гердер, Монтескье, Вольтер)</strong> — развили идею культуры как выражения разума, социального порядка и политических институтов.</li>
-            <li><strong>Эдвард Сепир и Бенджамин Уорф</strong> — авторы гипотезы лингвистической относительности, утверждающие, что язык формирует наше видение мира.</li>
-            <li><strong>Маршалл Маклюэн</strong> — философ; ещё в 1960-х предсказал появление «глобальной деревни» и «цифровых кочевников», которые будут перемещаться с огромной скоростью, не нуждаясь в постоянном доме.</li>
-        </ul>
-    </div>
-    
-    <!-- Netiquete.txt -->
-    <div id="Netiquete" class="content-panel">
-        <div class="lecture-title">Internet Etiquette Netiquette Guidelines for the Online Classroom</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Нетикет (Netiquette / Internet Etiquette)</strong> — базовые правила вежливого и уважительного поведения в интернете, определяющие то, как преподаватели и однокурсники будут воспринимать вас в процессе обучения.</li>
-            <li><strong>Профессиональный язык (Professional language)</strong> — стиль общения, предполагающий отказ от сленга и сокращений (например, LOL, TTYL), а также умеренное использование эмодзи, которые обычно неуместны в профессиональной среде.</li>
-            <li><strong>Тема письма (Subject line)</strong> — краткое и описательное название сообщения; в академической переписке обязательно должна содержать номер курса, чтобы преподаватель понимал, о каком классе идет речь.</li>
-            <li><strong>Шрифты Sans Serif</strong> — рекомендуемые для чтения с экрана шрифты без засечек (например, Arial или Helvetica); оптимальный размер для сообщений — 12–14 пунктов.</li>
-            <li><strong>Подпись (Signature)</strong> — блок в конце письма, включающий ваше имя, специализацию (major) и адрес электронной почты для обратной связи.</li>
-            <li><strong>ALL CAPS (Верхний регистр)</strong> — написание сообщений только заглавными буквами, что в интернет-коммуникации воспринимается как крик или проявление гнева.</li>
-            <li><strong>Цифровые границы (Professional communication boundaries)</strong> — соблюдение дистанции в общении, исключающее рассылку спама, «писем счастья» или чрезмерное раскрытие подробностей личной жизни.</li>
-            <li><strong>Публичность информации (Public information)</strong> — принцип, согласно которому любая информация, попавшая в интернет, остается там навсегда, не может быть полностью удалена и может быть отслежена даже при анонимной публикации.</li>
-        </ul>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">552 г.</div><div class="tl-event">Основание Тюркского каганата Бумыном.</div></div>
+          <div class="tl-item"><div class="tl-date">568 г.</div><div class="tl-event">Первое тюркское посольство в Константинополь (Маниах к Юстину II).</div></div>
+          <div class="tl-item"><div class="tl-date">603 г.</div><div class="tl-event">Распад единого каганата на Западный и Восточный.</div></div>
+          <div class="tl-item"><div class="tl-date">699 г.</div><div class="tl-event">Образование Тюргешского каганата.</div></div>
+          <div class="tl-item"><div class="tl-date">751 г.</div><div class="tl-event">Атлахская (Таласская) битва: разгром китайских войск.</div></div>
+          <div class="tl-item"><div class="tl-date">756 г.</div><div class="tl-event">Образование Карлукского каганата.</div></div>
+          <div class="tl-item"><div class="tl-date">942 г.</div><div class="tl-event">Возникновение государства Караханидов.</div></div>
+          <div class="tl-item"><div class="tl-date">960 г.</div><div class="tl-event">Официальное принятие ислама Муса-ханом как государственной религии.</div></div>
+          <div class="tl-item"><div class="tl-date">1212 г.</div><div class="tl-event">Падение государства Караханидов.</div></div>
+        </div>
+      </div>
 
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Преподаватель (Instructor)</strong> — лицо, к которому следует обращаться по официальному титулу (Dr., Professor, Mr., Ms.), если не указано иное; ожидает чёткости, лаконичности и соблюдения академических стандартов в переписке.</li>
-            <li><strong>Студент (Student)</strong> — участник онлайн-обучения, который должен проявлять уважение к труду и идеям коллег, избегать обидных комментариев и быть открытым к изучению чужих социальных и культурных норм.</li>
-            <li><strong>Автор гайдлайна (SD State Online)</strong> — формулирует «Золотое правило» цифровой этики: никогда не делайте и не говорите в онлайне того, что вы не сделали бы или не сказали бы в реальности (оффлайн).</li>
-            <li><strong>Собеседник (Audience)</strong> — реальный человек, находящийся «по ту сторону экрана», чьи чувства и достоинство необходимо уважать при любом текстовом обмене.</li>
-        </ul>
+      <div class="section">
+        <h3 class="section-title">Содержание</h3>
+        <div class="content-block">
+          <div class="block-title">Тюркский каганат и его устройство</div>
+          <div class="block-text"><p>Каганат был организован по принципу иерархии: каган → ябгу и шады → беки → кара будун (свободные общинники). Система «десяти стрел» в Западном каганате — военно-административное деление на 10 племенных объединений. Тудуны управляли оседлыми областями и собирали налоги.</p></div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Ислам и Шёлковый путь</div>
+          <div class="block-text"><p>Принятие ислама Караханидами в X веке стало переломным — впервые тюркский правитель объявил мусульманство государственной религией. Казахстан находился в центре торговых путей: Великий Шёлковый путь связывал Китай, Среднюю Азию и Европу. Карлуки после победы при Таласе (751) взяли под контроль ключевые торговые артерии.</p></div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Культура и письменность</div>
+          <div class="block-text"><p>Орхоно-енисейские рунические надписи — уникальный памятник тюркской письменности. Надписи в честь Бильге-кагана и Кюль-тегина содержат первые рефлексии о государственности. «Кутадгу Билиг» Юсуфа Баласагуни и словарь Махмуда Кашгари «Диван лугат ат-тюрк» — вершины тюркской литературы XI века.</p></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Lecture 2.txt -->
-    <div id="Lecture2" class="content-panel">
-        <div class="lecture-title">Лекция 2: Семиотика культуры. Анатомия культуры</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Семиотика культуры</strong> — область исследований, изучающая культуру как сложную систему знаков и символов, через которые люди обмениваются идеями, эмоциями и идеологиями.</li>
-            <li><strong>Анатомия культуры</strong> — метафора для анализа внутренней структуры культурных систем, их компонентов (пространство, измерения, формы) и того, как смыслы создаются и передаются во времени.</li>
-            <li><strong>Дописьменный (традиционный) код</strong> — тип глобального культурного кода, основанный на устной традиции, мифах и ритуальной коммуникации.</li>
-            <li><strong>Письменный (книжный) код</strong> — код, характеризующийся линейной логикой, индивидуальной рефлексией, формализацией законов и переходом к «Галактике Гутенберга».</li>
-            <li><strong>Экранный код</strong> — тип культуры, где доминирует визуальность, мозаичное восприятие и эмоциональное воздействие («глобальная деревня»).</li>
-            <li><strong>Цифровой код</strong> — современный код, определяемый гипертекстуальностью, интерактивностью и сетевым устройством общества.</li>
-            <li><strong>Анимизм</strong> — вера в одушевленность природы и в то, что все природные объекты обладают душой.</li>
-            <li><strong>Тотемизм</strong> — вера в сверхъестественное родство между группой людей и определенным видом животных или растений (предков).</li>
-            <li><strong>Фетишизм</strong> — приписывание сверхъестественной силы неодушевленным предметам.</li>
-        </ul>
-
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Фердинанд де Соссюр</strong> — швейцарский лингвист, один из основателей семиотики; предложил дуальную модель знака (означающее / означаемое) и разделил язык и речь.</li>
-            <li><strong>Чарльз Сандерс Пирс</strong> — американский философ и логик; разработал триадическую модель знака и классификацию (икона, индекс, символ).</li>
-            <li><strong>Чарльз Моррис</strong> — семиотик-бихевиорист; выделил в семиотике три раздела: семантику, синтактику и прагматику.</li>
-            <li><strong>Лев Выготский</strong> — психолог; утверждал, что язык и знаки являются когнитивными инструментами, формирующими мышление через процесс «внутренней речи».</li>
-            <li><strong>Юрий Лотман</strong> — основатель Тартуско-московской семиотической школы; рассматривал культуру как «семиосферу» — генератор смыслов и кодов.</li>
-            <li><strong>Ролан Барт</strong> — французский мыслитель; расширил семиотику на сферу массовой культуры, анализируя современные «мифы» в моде, рекламе и медиа.</li>
-            <li><strong>Юлия Кристева</strong> — ввела понятие «семианализа», изучающего динамику порождения смыслов в текстах через их исторический и культурный контекст.</li>
-        </ul>
+    <!-- ══ ЛЕКЦИЯ 3 ══ -->
+    <div class="lecture" id="lec-3">
+      <div class="lec-header">
+        <span class="lec-num">03</span>
+        <h2 class="lec-title">Монгольская эпоха и образование Казахского ханства</h2>
+        <div class="lec-divider"></div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Монгольская империя</div><div class="term-def">Крупнейшая в истории континентальная империя, созданная Чингисханом в XIII веке. Охватила большую часть Евразии.</div></div>
+          <div class="term-card"><div class="term-name">Улус Джучи (Золотая Орда)</div><div class="term-def">Западная часть Монгольской империи (западный улус), занимавшая территорию от Иртыша до Дуная. Центр — Сарай на Волге.</div></div>
+          <div class="term-card"><div class="term-name">Белая и Синяя Орды</div><div class="term-def">Части Улуса Джучи: Белая Орда (восток, Казахстан) и Синяя Орда (запад, Поволжье).</div></div>
+          <div class="term-card"><div class="term-name">Казахское ханство (1465 г.)</div><div class="term-def">Государство, основанное ханами Кереем и Жанибеком в долинах рек Чу и Талас после откочёвки от Улуса Абулхаира.</div></div>
+          <div class="term-card"><div class="term-name">Три жуза</div><div class="term-def">Система деления казахского общества на три территориальных и военных объединения: Старший, Средний и Младший жузы.</div></div>
+          <div class="term-card"><div class="term-name">Хан Тауке</div><div class="term-def">Казахский хан, при котором был составлен свод законов «Жеты Жаргы» («Семь уложений») — единая правовая система для трёх жузов.</div></div>
+          <div class="term-card"><div class="term-name">«Жеты Жаргы»</div><div class="term-def">Свод казахского обычного права, составленный при хане Тауке. Регулировал уголовные, имущественные, семейные отношения.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">Ч</div><div><div class="person-name">Чингисхан</div><div class="person-desc">Основатель Монгольской империи. Завоевал казахские степи в 1218–1225 гг., разрушил города Отрар, Сыгнак, Дженд.</div></div></div>
+          <div class="person-row"><div class="person-icon">К</div><div><div class="person-name">Керей и Жанибек</div><div class="person-desc">Основатели Казахского ханства (ок. 1465 г.). Совершили откочёвку от Абулхаира и создали первое независимое казахское государство.</div></div></div>
+          <div class="person-row"><div class="person-icon">К</div><div><div class="person-name">Касым-хан</div><div class="person-desc">При нём Казахское ханство достигло расцвета (нач. XVI в.), население выросло до 1 млн чел. Первый дипломатический контакт с Москвой.</div></div></div>
+          <div class="person-row"><div class="person-icon">Т</div><div><div class="person-name">Хан Тауке</div><div class="person-desc">Последний хан единого Казахского ханства, создатель «Жеты Жаргы». Объединил три жуза перед джунгарской угрозой.</div></div></div>
+          <div class="person-row"><div class="person-icon">А</div><div><div class="person-name">Абылай-хан</div><div class="person-desc">Великий казахский хан, признанный в 1771 г. всеми тремя жузами. Сочетал дипломатию (с Россией и Китаем) с военными победами над джунгарами.</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">1218–1225 гг.</div><div class="tl-event">Монгольское завоевание казахских степей Чингисханом.</div></div>
+          <div class="tl-item"><div class="tl-date">1243 г.</div><div class="tl-event">Образование Золотой Орды (Улус Джучи).</div></div>
+          <div class="tl-item"><div class="tl-date">Ок. 1465 г.</div><div class="tl-event">Основание Казахского ханства ханами Кереем и Жанибеком.</div></div>
+          <div class="tl-item"><div class="tl-date">Нач. XVI в.</div><div class="tl-event">Расцвет при Касым-хане. Население — около 1 млн человек.</div></div>
+          <div class="tl-item"><div class="tl-date">XVII в.</div><div class="tl-event">Начало экспансии Джунгарского ханства против казахов.</div></div>
+          <div class="tl-item"><div class="tl-date">1723–1725 гг.</div><div class="tl-event">«Актабан шубырынды» — годы великого бедствия от джунгарского нашествия.</div></div>
+          <div class="tl-item"><div class="tl-date">1727 и 1729 гг.</div><div class="tl-event">Победы казахского ополчения при Буланты и Анракае.</div></div>
+          <div class="tl-item"><div class="tl-date">1771 г.</div><div class="tl-event">Признание Абылай-хана всеми тремя жузами.</div></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Lecture 3.txt -->
-    <div id="Lecture3" class="content-panel">
-        <div class="lecture-title">Лекция 3: Кочевая культура Казахстана и прототюркское культурное наследие</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Номадизм (кочевничество)</strong> — особый тип социальной и экономической деятельности, основными характеристиками которого являются экстенсивное скотоводство, периодическое перемещение населения и скота, а также специфическое «степное» мировоззрение.</li>
-            <li><strong>Классификация кочевничества по типу поселения:</strong>
-                <ul class="nested-list">
-                    <li>Кочевой — постоянное движение, отсутствие поселений.</li>
-                    <li>Полукочевой — перемещение часть года, зимовки в стационарных поселениях.</li>
-                    <li>Полуоседлый — часть населения кочует, часть остается на месте.</li>
-                    <li>Джайляу (Yaylak) — сезонное перемещение на высокогорные летние пастбища.</li>
-                </ul>
-            </li>
-            <li><strong>Направления миграции:</strong>
-                <ul class="nested-list">
-                    <li>Вертикальное — между горами и равнинами.</li>
-                    <li>Горизонтальное — широтное, меридиональное или круговое движение.</li>
-                </ul>
-            </li>
-            <li><strong>Цифровой номадизм (Digital Nomadism)</strong> — современный феномен, обозначающий профессионалов, не привязанных к физическому месту работы и использующих интернет для работы из любой точки мира.</li>
-            <li><strong>Космогония</strong> — наука, изучающая происхождение и развитие космических тел и систем.</li>
-            <li><strong>Тенгрианство</strong> — религия древних кочевников Евразии (тюрков), основанная на культе Неба (Тенгри) и балансе с природой.</li>
-        </ul>
-
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Маршалл Маклюэн</strong> — социолог; ввел понятие «глобальной деревни», предсказав, что технологии позволят людям мгновенно перемещать информацию и жить в едином медиа-пространстве.</li>
-            <li><strong>Жак Аттали</strong> — экономист и политик; видел в номадизме будущее третьего тысячелетия — образ жизни новой глобальной элиты.</li>
-            <li><strong>Цугио Макимото и Дэвид Маннерс</strong> — авторы книги «Digital Nomad» (1990-е), впервые исследовавшие феномен цифровых кочевников.</li>
-            <li><strong>Мануэль Кастельс</strong> — социолог; отмечал, что мобильность номадов может быть как физической, так и виртуальной в сетевом обществе.</li>
-            <li><strong>Ирина Кушилова</strong> — рассматривает цифровой номадизм как важный социокультурный феномен XXI века.</li>
-            <li><strong>Леонида Фортунати</strong> — итальянский ученый; ввела понятие <strong>«кочевой близости» (nomadic closeness)</strong>, описывающее привычку общаться через гаджеты в общественных местах.</li>
-            <li><strong>Токсарид</strong> — образованный скифский лекарь и мыслитель, живший в Афинах.</li>
-            <li><strong>Анахарсис</strong> — знаменитый скифский мудрец, вошедший в число «Семи мудрецов» античности.</li>
-        </ul>
+    <!-- ══ ЛЕКЦИЯ 4 ══ -->
+    <div class="lecture" id="lec-4">
+      <div class="lec-header">
+        <span class="lec-num">04</span>
+        <h2 class="lec-title">Казахстан в составе Российской империи</h2>
+        <div class="lec-divider"></div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Протекторат</div><div class="term-def">Формальный союз, при котором одно государство берёт другое под покровительство, сохраняя его внутреннюю автономию. Именно так казахи воспринимали акты 1731–1742 гг., в отличие от России, трактовавшей их как полное подданство.</div></div>
+          <div class="term-card"><div class="term-name">Реформы 1822–1824 гг.</div><div class="term-def">Разделение Степи на округа, упразднение ханской власти. Введена трёхступенчатая система: аул → волость → округ.</div></div>
+          <div class="term-card"><div class="term-name">Реформы 1867–1868 гг.</div><div class="term-def">Завершение административного захвата. Казахстан разделён на три генерал-губернаторства. Вся земля объявлена государственной собственностью России.</div></div>
+          <div class="term-card"><div class="term-name">Переселенческая политика</div><div class="term-def">Массовое переселение крестьян из центра России в Степь после отмены крепостного права (1861). Изъятие «излишков» пастбищ через экспедицию Щербины.</div></div>
+          <div class="term-card"><div class="term-name">Горькая/Иртышская/Оренбургская линии</div><div class="term-def">Цепи военных крепостей, возводившихся Россией для контроля над Степью и продвижения вглубь Азии.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">А</div><div><div class="person-name">Абулхаир-хан (Младший жуз)</div><div class="person-desc">В 1731 г. подписал акт о принятии российского подданства. Стремился использовать Россию в борьбе с джунгарами и в межказахских распрях.</div></div></div>
+          <div class="person-row"><div class="person-icon">А</div><div><div class="person-name">Абылай-хан</div><div class="person-desc">Признавал власть и России, и Китая одновременно, умело маневрируя для сохранения фактической независимости.</div></div></div>
+          <div class="person-row"><div class="person-icon">С</div><div><div class="person-name">Сперанский М.М.</div><div class="person-desc">Разработал «Устав о сибирских киргизах» (1822 г.) — документ, упразднивший ханскую власть в Среднем жузе.</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">1731 г.</div><div class="tl-event">Абулхаир-хан (Младший жуз) принимает российское подданство.</div></div>
+          <div class="tl-item"><div class="tl-date">1742 г.</div><div class="tl-event">Средний жуз формально принимает российское подданство.</div></div>
+          <div class="tl-item"><div class="tl-date">1822–1824 гг.</div><div class="tl-event">Реформы Сперанского/Эссена: упразднение ханской власти в Среднем и Младшем жузах.</div></div>
+          <div class="tl-item"><div class="tl-date">1861 г.</div><div class="tl-event">Отмена крепостного права в России → начало массового переселения в Степь.</div></div>
+          <div class="tl-item"><div class="tl-date">1867–1868 гг.</div><div class="tl-event">Реформы: разделение на три генерал-губернаторства. Земля объявлена государственной.</div></div>
+          <div class="tl-item"><div class="tl-date">1891 г.</div><div class="tl-event">Начало Переселенческих экспедиций (Щербина и др.) — изъятие «излишних» земель.</div></div>
+          <div class="tl-item"><div class="tl-date">1900-е</div><div class="tl-event">Запланировано изъятие до 18 млн десятин казахских пастбищ.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Важные замечания</h3>
+        <div class="quote-block">«Существовал огромный разрыв между восприятием казахов (формальный союз) и русских (полное подчинение)».<span class="quote-source">— Х. Ходарковский</span></div>
+        <div class="quote-block">В отличие от колонизации Америк (морской), Россия осуществляла <strong>сухопутную колонизацию</strong>, продвигаясь на восток в среднем на размер Нидерландов ежегодно в течение 150 лет.<span class="quote-source">— Из материалов курса</span></div>
+      </div>
     </div>
 
-    <!-- Lecture 4.txt -->
-    <div id="Lecture4" class="content-panel">
-        <div class="lecture-title">Лекция 4: Средневековая культура Центральной Азии и тюркское культурное наследие</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Цитадель (Citadel)</strong> — наиболее укрепленная центральная часть средневекового тюркского города, служившая убежищем и местом расположения дворца правителя.</li>
-            <li><strong>Шахристан (Shahristan)</strong> — центральное ядро города, защищенное стенами, где проживала знать и административная элита.</li>
-            <li><strong>Рабад (Rabad)</strong> — торгово-ремесленные предместья, расположенные за пределами центральных городских стен, где находились мастерские и рынки.</li>
-            <li><strong>Мечеть (Mosque)</strong> — новый элемент городской застройки, ставший обязательным в планировке городов с IX–XII веков после распространения ислама.</li>
-            <li><strong>Хаммам (Hammam)</strong> — общественные бани, выполнявшие функции не только гигиенических, но и социальных центров.</li>
-            <li><strong>Базар (Bazaar)</strong> — экономическое сердце города, место пересечения международной караванной торговли.</li>
-            <li><strong>Глазурованная керамика</strong> — значительное достижение тюркского ремесла X–XII веков с богатым орнаментом и росписью.</li>
-            <li><strong>Зикр (Dhikr)</strong> — духовная практика суфиев; в Казахстане она часто принимала форму «громкого зикра», объединяясь с элементами традиционного шаманизма.</li>
-        </ul>
-
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Абу Наср аль-Фараби</strong> — уроженец Отрара, всемирно известный философ, прозванный <strong>«Вторым учителем»</strong> (после Аристотеля); написал «Трактат о взглядах жителей добродетельного города».</li>
-            <li><strong>Юсуф Баласагуни</strong> — мыслитель XI века, автор «Кутадгу Билиг» (Благодатное знание); разработал модель идеального общества, основанного на законе и разуме.</li>
-            <li><strong>Махмуд аль-Кашгари</strong> — выдающийся ученый-энциклопедист, автор «Диван лугат ат-турк» — главного источника о языке и культуре средневековых тюрков.</li>
-            <li><strong>Ходжа Ахмет Яссави</strong> — влиятельный суфийский проповедник; его учение гармонизировало ислам с тюркскими традициями степи.</li>
-        </ul>
+    <!-- ══ ЛЕКЦИЯ 5 ══ -->
+    <div class="lecture" id="lec-5">
+      <div class="lec-header">
+        <span class="lec-num">05</span>
+        <h2 class="lec-title">Национально-освободительная борьба казахского народа против колониализма</h2>
+        <div class="lec-divider"></div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Национально-освободительное движение</div><div class="term-def">Непрерывный процесс борьбы различных слоёв казахского общества (шаруа, султанов, интеллигенции) за восстановление государственной независимости.</div></div>
+          <div class="term-card"><div class="term-name">Шаруа</div><div class="term-def">Рядовые кочевники-скотоводы, составлявшие основную движущую силу народных восстаний.</div></div>
+          <div class="term-card"><div class="term-name">Джут</div><div class="term-def">Массовый падёж скота из-за неблагоприятных погодных условий. Часто становился катализатором социальных взрывов.</div></div>
+          <div class="term-card"><div class="term-name">«Актабан шубырынды»</div><div class="term-def">«Годы великого бедствия» (1723–1725) — период катастрофических потерь от джунгарского нашествия.</div></div>
+          <div class="term-card"><div class="term-name">Реквизиция 1916 г.</div><div class="term-def">Принудительный призыв мужского населения (18–43 лет) на тыловые работы в годы Первой мировой войны. Стал поводом к восстанию.</div></div>
+          <div class="term-card"><div class="term-name">Алаш-Орда</div><div class="term-def">Правительство казахской автономии, созданное в декабре 1917 года.</div></div>
+          <div class="term-card"><div class="term-name">Каркаралинская петиция (1905 г.)</div><div class="term-def">Программный документ, составленный на Кояндинской ярмарке. Ознаменовал начало политического этапа движения «Алаш».</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">С</div><div><div class="person-name">Сырым Датулы (1753–1802)</div><div class="person-desc">Руководитель первого крупного восстания в Младшем жузе (1783–1797) против колониального гнёта и произвола казачества. Достиг частичного компромисса.</div></div></div>
+          <div class="person-row"><div class="person-icon">И</div><div><div class="person-name">Исатай Тайманулы (1791–1838)</div><div class="person-desc">Руководитель восстания в Букеевской Орде (1836–1838), боровшийся против всевластия хана Жангира.</div></div></div>
+          <div class="person-row"><div class="person-icon">М</div><div><div class="person-name">Махамбет Утемисулы (1804–1846)</div><div class="person-desc">Великий акын, идеолог и соратник Исатая. Призывал народ к борьбе своими пламенными стихами.</div></div></div>
+          <div class="person-row"><div class="person-icon">К</div><div><div class="person-name">Кенесары Касымулы (1802–1847)</div><div class="person-desc">Последний всеказахский хан, внук Абылая. Возглавлял самое масштабное 10-летнее восстание (1837–1847) за восстановление единого Казахского ханства.</div></div></div>
+          <div class="person-row"><div class="person-icon">А</div><div><div class="person-name">Амангельды Иманов</div><div class="person-desc">Руководитель Тургайского центра восстания 1916 года. Создал дисциплинированную 50-тысячную повстанческую армию.</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">1783–1797 гг.</div><div class="tl-event">Восстание Сырыма Датулы в Младшем жузе.</div></div>
+          <div class="tl-item"><div class="tl-date">1836–1838 гг.</div><div class="tl-event">Восстание Исатая Тайманулы и Махамбета Утемисулы в Букеевской Орде.</div></div>
+          <div class="tl-item"><div class="tl-date">1837–1847 гг.</div><div class="tl-event">Восстание Кенесары Касымулы (охватило почти весь Казахстан).</div></div>
+          <div class="tl-item"><div class="tl-date">Сентябрь 1841 г.</div><div class="tl-event">Избрание Кенесары Касымулы ханом.</div></div>
+          <div class="tl-item"><div class="tl-date">25 июля 1905 г.</div><div class="tl-event">Составление Каркаралинской петиции.</div></div>
+          <div class="tl-item"><div class="tl-date">25 июня 1916 г.</div><div class="tl-event">Указ Николая II о мобилизации «инородцев» на тыловые работы.</div></div>
+          <div class="tl-item"><div class="tl-date">Июль 1917 г.</div><div class="tl-event">Первый всеказахский съезд в Оренбурге; создание партии «Алаш».</div></div>
+          <div class="tl-item"><div class="tl-date">17–18 декабря 1986 г.</div><div class="tl-event">Протесты молодёжи в Алма-Ате (Желтоксан).</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Цитаты</h3>
+        <div class="quote-block">«Қазақ мың өліп, мың тірілді» — «Казахский народ тысячу раз умирал и тысячу раз возрождался».<span class="quote-source">— Жубан Молдагалиев</span></div>
+        <div class="quote-block">«Народ, потерявший свой язык, со временем исчезает как национальность».<span class="quote-source">— А. Байтурсынов</span></div>
+      </div>
     </div>
 
-    <!-- Lecture 5.txt -->
-    <div id="Lecture5" class="content-panel">
-        <div class="lecture-title">Лекция 5: Формирование казахской культуры. Казахская культура в XVIII — конце XIX веков</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Протоказахский период</strong> — социально-исторический процесс культурного развития на территории Казахстана, начавшийся с эпохи саков и гуннов до тюркской эпохи.</li>
-            <li><strong>Религиозный синкретизм</strong> — процесс объединения различных верований; проявился в синтезе ислама с элементами тенгрианства и шаманизма.</li>
-            <li><strong>Космогония</strong> — теория или миф о происхождении Вселенной и её структуры.</li>
-            <li><strong>Тенгри</strong> — небесное божество в древнем тюркском мировоззрении, сохранившееся в культуре степи.</li>
-            <li><strong>Жырау</strong> — сказители и поэты, игравшие ключевую роль в сохранении коллективной памяти через устную литературу и эпосы.</li>
-            <li><strong>Акын</strong> — поэт-импровизатор, мастер вербального творчества под аккомпанемент музыкальных инструментов.</li>
-            <li><strong>Толгау</strong> — назидательно-философский жанр устной поэзии с размышлениями о жизни.</li>
-        </ul>
-
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Мухаммед Хайдар Дулати</strong> — выдающийся ученый XVI века, автор «Тарих-и-Рашиди» — важнейшего источника по ранней истории Казахского ханства.</li>
-            <li><strong>Курмангазы Сагырбайулы</strong> — легендарный композитор и кюйши; его произведения («Адай», «Сарыарка») выражали дух свободы и борьбы.</li>
-            <li><strong>Таттимбет Казангапулы</strong> — основатель лирического стиля «шертпе» в музыке для домбры («Косбасар»).</li>
-            <li><strong>Жаяу Муса</strong> — композитор и поэт-сатирик; первым внедрил европейские инструменты (скрипку) в казахскую музыку.</li>
-            <li><strong>Шортанбай Канайулы</strong> — основоположник литературного течения «Зарзаман» (Эпоха скорби), критиковавший упадок традиций в период колонизации.</li>
-            <li><strong>Асан Кайгы</strong> — легендарный философ XV века, искавший утопическую землю «Жеруйык» для объединения народа.</li>
-        </ul>
+    <!-- ══ ЛЕКЦИЯ 6 ══ -->
+    <div class="lecture" id="lec-6">
+      <div class="lec-header">
+        <span class="lec-num">06</span>
+        <h2 class="lec-title">Национально-освободительная борьба в начале XX века: Движение «Алаш»</h2>
+        <div class="lec-divider"></div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Воображаемые сообщества</div><div class="term-def">Концепция Бенедикта Андерсона: нация — социально сконструированное сообщество, члены которого никогда не знают друг друга, но объединены общим чувством принадлежности через символы и медиа.</div></div>
+          <div class="term-card"><div class="term-name">Печатный капитализм</div><div class="term-def">Система массового производства печатной продукции на национальных языках, сыгравшая ключевую роль в формировании национального самосознания.</div></div>
+          <div class="term-card"><div class="term-name">Жадидизм</div><div class="term-def">Интеллектуальное движение за обновление исламской культуры и образования, выступавшее за внедрение светских наук и европейских методов обучения.</div></div>
+          <div class="term-card"><div class="term-name">Алашское движение</div><div class="term-def">Национально-демократическое движение казахской интеллигенции, направленное на достижение автономии Казахстана в составе федеративной России.</div></div>
+          <div class="term-card"><div class="term-name">Алаш-Орда</div><div class="term-def">Правительство автономной республики Алаш, провозглашённое в декабре 1917 года.</div></div>
+          <div class="term-card"><div class="term-name">«Между двух огней»</div><div class="term-def">Метафора Байтурсынова о положении казахской интеллигенции, зажатой между традиционной мусульманской культурой и давлением российской/европейской цивилизаций.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">Б</div><div><div class="person-name">Алихан Букейханов</div><div class="person-desc">Лидер партии «Алаш» и правительства Алаш-Орда. Настаивал на светском характере автономии и отделении религии от государства.</div></div></div>
+          <div class="person-row"><div class="person-icon">А</div><div><div class="person-name">Ахмет Байтурсынов</div><div class="person-desc">«Учитель нации», реформатор алфавита (создатель «Төте жазу»), автор грамматических пособий и сборника «Маса».</div></div></div>
+          <div class="person-row"><div class="person-icon">Д</div><div><div class="person-name">Миржакип Дулатов</div><div class="person-desc">Автор книги «Оян, қазақ!» (1909) — первого казахского романа «Бақытсыз Жамал» (1910) и активный публицист.</div></div></div>
+          <div class="person-row"><div class="person-icon">Ш</div><div><div class="person-name">Мустафа Шокай</div><div class="person-desc">Один из лидеров Туркестанской (Кокандской) автономии, борец за единство тюркских народов.</div></div></div>
+          <div class="person-row"><div class="person-icon">Ж</div><div><div class="person-name">Магжан Жумабаев</div><div class="person-desc">Поэт-модернист, воспевавший тюркское единство. Создал образ поэта как «великого кочевника».</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">1905 г.</div><div class="tl-event">Каркаралинская петиция — первый крупный политический документ казахской интеллигенции.</div></div>
+          <div class="tl-item"><div class="tl-date">1906–1907 гг.</div><div class="tl-event">Работа I и II Государственных Дум. Казахские депутаты разоблачают колониальную аграрную политику.</div></div>
+          <div class="tl-item"><div class="tl-date">1909 г.</div><div class="tl-event">Выход книги «Оян, қазақ!» Дулатова — манифест национального пробуждения.</div></div>
+          <div class="tl-item"><div class="tl-date">1911–1915 гг.</div><div class="tl-event">Издание журнала «Айкап» — первого казахского общественно-политического журнала.</div></div>
+          <div class="tl-item"><div class="tl-date">1913–1918 гг.</div><div class="tl-event">Издание газеты «Казах» — печатного органа движения «Алаш».</div></div>
+          <div class="tl-item"><div class="tl-date">Декабрь 1917 г.</div><div class="tl-event">Провозглашение Алашской автономии и правительства Алаш-Орда.</div></div>
+          <div class="tl-item"><div class="tl-date">17–18 декабря 1986 г.</div><div class="tl-event">«Желтоксан» — декабрьские события в Алма-Ате. Первый открытый вызов советской системе.</div></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Lecture 6.txt -->
-    <div id="Lecture6" class="content-panel">
-        <div class="lecture-title">Лекция 6: Казахская культура в XX веке</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Советская культурная политика</strong> — государственная система мер, направленная на создание социалистической культуры, основанной на коммунистической идеологии.</li>
-            <li><strong>Ликвидация безграмотности (Ликбез)</strong> — масштабная программа 1920-х – 1930-х годов по обучению населения чтению и письму (к 1939 году уровень грамотности достиг 83,6%).</li>
-            <li><strong>Единая трудовая школа</strong> — двухступенчатая система школьного образования, заменившая дореволюционные религиозные учебные заведения.</li>
-            <li><strong>Идеологический контроль</strong> — жесткая система цензуры, включавшая подавление национальной интеллигенции и трудов деятелей «Алаш-Орды».</li>
-            <li><strong>Академия наук Казахской ССР</strong> — основанное в 1946 году главное научное учреждение республики, объединившее десятки НИИ.</li>
-            <li><strong>«Путь Абая» (Абай жолы)</strong> — всемирно известный четырехтомный роман-эпопея Мухтара Ауэзова, «энциклопедия казахской жизни».</li>
-        </ul>
-
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Каныш Сатпаев</strong> — выдающийся ученый-геолог, первый президент Академии наук Казахской ССР.</li>
-            <li><strong>Мукан Тулебаев</strong> — композитор, автор знаменитой оперы «Биржан и Сара».</li>
-            <li><strong>Николай Хлудов</strong> — русский художник, создавший студию в Алма-Ате (1920) и запечатлевший традиционный быт казахов.</li>
-            <li><strong>Бибигуль Тулегенова, Роза Багланова</strong> — великие певицы, популяризировавшие казахское оперное и песенное искусство.</li>
-            <li><strong>Абильхан Кастеев</strong> — основоположник казахского профессионального изобразительного искусства.</li>
-            <li><strong>Ильяс Есенберлин</strong> — автор исторической трилогии «Кочевники», вернувшей народу память о его истории в советский период.</li>
-            <li><strong>Олжас Сулейменов</strong> — поэт и исследователь, автор книги «Аз и Я», вызвавшей огромный общественный резонанс.</li>
-        </ul>
+    <!-- ══ ЛЕКЦИЯ 7 ══ -->
+    <div class="lecture" id="lec-7">
+      <div class="lec-header">
+        <span class="lec-num">07</span>
+        <h2 class="lec-title">Советская модернизация Казахстана</h2>
+        <div class="lec-divider"></div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Советизация</div><div class="term-def">Процесс установления советской власти и трансформации общественно-политического строя по единому большевистскому образцу.</div></div>
+          <div class="term-card"><div class="term-name">Индустриализация</div><div class="term-def">Форсированное строительство тяжёлой промышленности в 1930-е годы. В Казахстане — сырьевая ориентация с опорой на труд заключённых.</div></div>
+          <div class="term-card"><div class="term-name">Коллективизация</div><div class="term-def">Принудительное объединение индивидуальных хозяйств в колхозы. Привела к катастрофическому голоду 1931–1933 гг. (Ашаршылык).</div></div>
+          <div class="term-card"><div class="term-name">Ашаршылык</div><div class="term-def">Голод 1931–1933 гг. в Казахстане. Погибло около 2 млн человек (≈49% этнических казахов). Поголовье скота упало с 40,5 до 4,5 млн голов.</div></div>
+          <div class="term-card"><div class="term-name">Турксиб</div><div class="term-def">Туркестано-Сибирская железная дорога (1445 км), связавшая Сибирь со Средней Азией. Обеспечила экспорт казахстанского сырья.</div></div>
+          <div class="term-card"><div class="term-name">Коренизация</div><div class="term-def">Советская политика 1920-х гг. по внедрению местных языков в управление. Была свёрнута к 1926 г. и заменена русификацией.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Содержание</h3>
+        <div class="content-block">
+          <div class="block-title">Индустриализация: достижения и цена</div>
+          <div class="block-text"><p>Крупнейшие объекты: Урало-Эмбинский нефтяной район, Карагандинский угольный бассейн (третья угольная база СССР), Чимкентский свинцовый завод, Балхашский и Джезказганский медеплавильные комбинаты. Турксиб связал Сибирь со Средней Азией. Однако индустриальное развитие шло в ущерб уровню жизни — планы пятилеток в лёгкой промышленности систематически не выполнялись.</p></div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Трагедия коллективизации и голода</div>
+          <div class="block-text"><p>Принудительная седентаризация кочевников. Раскулачивание (ликвидация баев), конфискация скота. Потеря около 49% этнических казахов (ок. 2 млн чел.). Массовая откочёвка за рубеж — 616 тыс. человек. Более 370 вооружённых восстаний по всей республике.</p></div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Казахстан во Второй мировой войне</div>
+          <div class="block-text"><p>Мобилизовано 1,2 млн человек (20% населения), из них 600 тысяч погибли. Казахстан — «арсенал фронта»: добывалось 85% союзного свинца, 60% молибдена, 35% меди. Из 10 пуль 9 были отлиты из казахстанского свинца. 700 тыс. человек призваны в трудовую армию.</p></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">1918 г.</div><div class="tl-event">Образование Туркестанской АССР (ТАССР).</div></div>
+          <div class="tl-item"><div class="tl-date">1920 г.</div><div class="tl-event">Образование КазАССР.</div></div>
+          <div class="tl-item"><div class="tl-date">1928 г.</div><div class="tl-event">Открытие первого вуза Казахстана — КазПИ. Переход алфавита с арабского на латиницу.</div></div>
+          <div class="tl-item"><div class="tl-date">1931–1933 гг.</div><div class="tl-event">Ашаршылык — массовый голод. Гибель ок. 2 млн казахов.</div></div>
+          <div class="tl-item"><div class="tl-date">1936 г.</div><div class="tl-event">Образование Казахской ССР.</div></div>
+          <div class="tl-item"><div class="tl-date">1940 г.</div><div class="tl-event">Переход алфавита с латиницы на кириллицу.</div></div>
+          <div class="tl-item"><div class="tl-date">22 июня 1941 г.</div><div class="tl-event">Начало Великой Отечественной войны.</div></div>
+          <div class="tl-item"><div class="tl-date">9 мая 1945 г.</div><div class="tl-event">Победа над нацистской Германией.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Цитаты</h3>
+        <div class="quote-block">«Преднамеренное уморение голодом казахского народа в сочетании с чистками интеллигенции делает это явным случаем геноцида».<span class="quote-source">— Курт Йонассон</span></div>
+        <div class="quote-block">«В городах и на станциях ежедневно вывозят трупы умерших казахов... отмечаются случаи трупоедства».<span class="quote-source">— Т. Рыскулов в письме Сталину (1933)</span></div>
+      </div>
     </div>
 
-    <!-- Lecture 7.txt -->
-    <div id="Lecture7" class="content-panel">
-        <div class="lecture-title">Лекция 7: Казахская культура в контексте современных мировых процессов</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Глобализация</strong> — процесс формирования взаимозависимости стран (экономика, технологии, культура), направленный на создание единого мирового пространства.</li>
-            <li><strong>Идентичность (Identity)</strong> — система ценностей и институтов, через которые человек или группа осознают «кто я есть» и чем отличаются от других.</li>
-            <li><strong>Культурный интеллект (CQ)</strong> — способность человека эффективно функционировать и адаптироваться в культурно разнообразных ситуациях.</li>
-            <li><strong>Четыре измерения CQ:</strong>
-                <ul class="nested-list">
-                    <li><strong>Драйв (Мотивационный)</strong> — интерес и уверенность в межкультурном контакте.</li>
-                    <li><strong>Знания (Когнитивный)</strong> — понимание различий между структурами культур.</li>
-                    <li><strong>Стратегия (Метакогнитивный)</strong> — способность осознанно планировать действия при контакте с другой культурой.</li>
-                    <li><strong>Действие (Поведенческий)</strong> — гибкость вербальных и невербальных сигналов при сохранении аутентичности.</li>
-                </ul>
-            </li>
-            <li><strong>IT-этика</strong> — система норм, регулирующая моральное поведение в цифровой среде.</li>
-            <li><strong>Нетикет (Netiquette)</strong> — правила вежливого и уважительного онлайн-общения.</li>
-        </ul>
-
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Сун Анг (Soon Ang)</strong> — ключевой исследователь в разработке концепции культурного интеллекта (CQ).</li>
-            <li><strong>Лев Гумилев</strong> — ученый, чьи идеи об идентичности как «пассионарной силе» используются для анализа развития наций.</li>
-            <li><strong>Рустам Хальфин</strong> — авангардный художник, заложивший основы актуального искусства Казахстана в эпоху турбулентности 90-х.</li>
-            <li><strong>Сергей Маслов</strong> — художник-экспериментатор, смешивавший современную реальность с национальными мифами и аруахами.</li>
-            <li><strong>Сауле Сулейменова</strong> — современная художница, известная созданием картин из <strong>пластиковых пакетов</strong>, посвященных трагическим страницам истории (АЛЖИР, 1986).</li>
-            <li><strong>Ербосын Мельдибеков</strong> — мастер инсталляций, отражающий столкновение советского прошлого и глобального будущего.</li>
-        </ul>
+    <!-- ══ ЛЕКЦИЯ 8 ══ -->
+    <div class="lecture" id="lec-8">
+      <div class="lec-header">
+        <span class="lec-num">08</span>
+        <h2 class="lec-title">Противоречия советских реформ (вторая половина XX в.) и политика «Перестройки»</h2>
+        <div class="lec-divider"></div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">«Оттепель»</div><div class="term-def">Период в СССР (сер. 1950-х — сер. 1960-х): смягчение режима, частичная десталинизация и надежды на улучшение жизни.</div></div>
+          <div class="term-card"><div class="term-name">Освоение целины</div><div class="term-def">Масштабная кампания 1954 г. по распашке 25+ млн га. Казахстан стал «житницей» СССР, но кампания вызвала эрозию почв и демографический дисбаланс (казахи упали до 29–30% населения к 1959 г.).</div></div>
+          <div class="term-card"><div class="term-name">Семипалатинский ядерный полигон</div><div class="term-def">Основной испытательный полигон СССР (1949–1989). 456 ядерных взрывов. Затронули здоровье 1,5 млн человек.</div></div>
+          <div class="term-card"><div class="term-name">Аральская катастрофа</div><div class="term-def">Экологическое бедствие: чрезмерный забор воды для орошения хлопка привёл к высыханию Аральского моря на 20 м к 1980-м гг.</div></div>
+          <div class="term-card"><div class="term-name">«Желтоксан» (1986)</div><div class="term-def">Декабрьские протесты молодёжи в Алма-Ате против назначения Г. Колбина. Первый открытый вызов советской бюрократической системе.</div></div>
+          <div class="term-card"><div class="term-name">Перестройка</div><div class="term-def">Политика М. Горбачёва по обновлению системы через лозунги «ускорение», «гласность» и «демократизация».</div></div>
+          <div class="term-card"><div class="term-name">«Застой»</div><div class="term-def">Период правления Л. Брежнева (1964–1982): политическая стабильность при отсутствии реальных реформ, коррупция и падение темпов роста.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">Х</div><div><div class="person-name">Никита Хрущёв</div><div class="person-desc">Лидер СССР. Инициатор десталинизации (XX съезд КПСС, 1956) и проекта освоения целины.</div></div></div>
+          <div class="person-row"><div class="person-icon">К</div><div><div class="person-name">Динмухамед Кунаев</div><div class="person-desc">Первый секретарь ЦК Компартии Казахстана (1960–1986 с перерывом). При нём республика достигла значительного индустриального прогресса.</div></div></div>
+          <div class="person-row"><div class="person-icon">С</div><div><div class="person-name">Олжас Сулейменов</div><div class="person-desc">Поэт, автор книги «Аз и Я» (1975). Лидер антиядерного движения «Невада — Семипалатинск» (1989).</div></div></div>
+          <div class="person-row"><div class="person-icon">Ш</div><div><div class="person-name">Мухтар Шаханов</div><div class="person-desc">Поэт и общественный деятель, вставший на защиту участников декабрьских событий 1986 г.</div></div></div>
+          <div class="person-row"><div class="person-icon">Р</div><div><div class="person-name">Кайрат Рыскулбеков</div><div class="person-desc">Студент — символ «Желтоксана». Несправедливо обвинён и погиб в тюрьме. Посмертно удостоен звания Халық Қаһарманы.</div></div></div>
+          <div class="person-row"><div class="person-icon">Н</div><div><div class="person-name">Нурсултан Назарбаев</div><div class="person-desc">С июня 1989 г. — Первый секретарь ЦК КП Казахстана. В апреле 1990 г. избран первым президентом КазССР.</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">1949–1989 гг.</div><div class="tl-event">Ядерные испытания на Семипалатинском полигоне (456 взрывов).</div></div>
+          <div class="tl-item"><div class="tl-date">1954 г.</div><div class="tl-event">Решение об освоении целинных земель.</div></div>
+          <div class="tl-item"><div class="tl-date">Февраль 1956 г.</div><div class="tl-event">XX съезд КПСС: доклад Хрущёва о культе личности; начало реабилитации.</div></div>
+          <div class="tl-item"><div class="tl-date">1975 г.</div><div class="tl-event">Публикация книги О. Сулейменова «Аз и Я».</div></div>
+          <div class="tl-item"><div class="tl-date">Март 1985 г.</div><div class="tl-event">Провозглашение курса на «Перестройку».</div></div>
+          <div class="tl-item"><div class="tl-date">16 декабря 1986 г.</div><div class="tl-event">Смещение Кунаева, назначение Г. Колбина.</div></div>
+          <div class="tl-item"><div class="tl-date">17–18 декабря 1986 г.</div><div class="tl-event">Декабрьские события (Желтоксан) в Алма-Ате.</div></div>
+          <div class="tl-item"><div class="tl-date">Февраль 1989 г.</div><div class="tl-event">Создание движения «Невада — Семипалатинск».</div></div>
+          <div class="tl-item"><div class="tl-date">25 октября 1990 г.</div><div class="tl-event">Принятие Декларации о государственном суверенитете КазССР.</div></div>
+          <div class="tl-item"><div class="tl-date">16 декабря 1991 г.</div><div class="tl-event">Провозглашение государственной независимости Республики Казахстан.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Цитаты</h3>
+        <div class="quote-block">«Это был первый открытый протест против советской бюрократической системы, вдохновивший последующие движения в Тбилиси, Баку и Вильнюсе».<span class="quote-source">— О декабрьских событиях 1986 г.</span></div>
+        <div class="quote-block">Экономика КазССР на 95% контролировалась Москвой, что делало республику сырьевым придатком центра.<span class="quote-source">— Критическое замечание из курса</span></div>
+      </div>
     </div>
 
-    <!-- Lecture 8.txt -->
-    <div id="Lecture8" class="content-panel">
-        <div class="lecture-title">Лекция 8: Казахская культура в контексте глобализации, архитектурный облик Астаны и роль музеев</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Глобализация (Globalization)</strong> — процесс расширения взаимосвязи стран во всех сферах для создания единого мирового инфопространства.</li>
-            <li><strong>Идентичность (Identity)</strong> — система материальных и духовных ориентиров, отличающих одно общество от другого.</li>
-            <li><strong>Этническая память (Ethnic Memory)</strong> — коллективная память народа, сохраняемая через культурное наследие и музеи.</li>
-            <li><strong>Культурный код (Cultural Code)</strong> — «ДНК» культуры; мгновенно узнаваемые образы (степная эстетика, орнаменты).</li>
-            <li><strong>Эклетика (Eclecticism)</strong> — архитектурный стиль Астаны, представляющий собой диалог между футуризмом Запада и традициями Востока.</li>
-            <li><strong>Метаболизм (в градостроительстве)</strong> — концепция гибкого развития города как живого организма, способного к обновлению.</li>
-        </ul>
-
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Кишо Курокава (Kisho Kurokawa)</strong> — японский архитектор, автор генерального плана Астаны, заложивший принципы метаболизма.</li>
-            <li><strong>Норман Фостер (Norman Foster)</strong> — спроектировал культовые объекты Астаны: «Хан Шатыр» (образ кочевой юрты) и Дворец мира и согласия.</li>
-            <li><strong>Акумурза Рустембеков</strong> — архитектор, создавший проект монумента Байтерек — главного символа столицы.</li>
-            <li><strong>Гирт Хофстеде (Geert Hofstede)</strong> — социолог, выделивший шесть ключевых культурных измерений для анализа наций.</li>
-            <li><strong>Макин Торегельдин</strong> — пример личной инициативы в сохранении региональной памяти, создатель музея истории горного дела в Жезказгане.</li>
-            <li><strong>Кемаль Акишев</strong> — легендарный археолог, открывший всему миру «Золотого человека».</li>
-        </ul>
+    <!-- ══ ЛЕКЦИЯ 9 ══ -->
+    <div class="lecture" id="lec-9">
+      <div class="lec-header">
+        <span class="lec-num">09</span>
+        <h2 class="lec-title">Возрождение национальной государственности Казахстана и развитие страны (1991–2020-е гг.)</h2>
+        <div class="lec-divider"></div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Суверенитет</div><div class="term-def">Верховенство и независимость государственной власти, подтверждённые Конституционным законом от 16 декабря 1991 г.</div></div>
+          <div class="term-card"><div class="term-name">Тенге</div><div class="term-def">Национальная валюта РК, введённая 15 ноября 1993 г. Обеспечила стране экономический и денежный суверенитет.</div></div>
+          <div class="term-card"><div class="term-name">Гиперинфляция</div><div class="term-def">Инфляция в 1993 г. достигла 2265% — катастрофический рост цен в переходный период.</div></div>
+          <div class="term-card"><div class="term-name">Национальный фонд РК</div><div class="term-def">«Финансовая подушка» страны, созданная в 2000 г. Стабилизирует бюджет при падении нефтяных цен и накапливает средства для будущих поколений.</div></div>
+          <div class="term-card"><div class="term-name">«Слышащее государство»</div><div class="term-def">Концепция К. Токаева (2019): оперативное реагирование власти на запросы граждан через прямой диалог.</div></div>
+          <div class="term-card"><div class="term-name">«Адилетти Казакстан»</div><div class="term-def">«Справедливый Казахстан» — концепция общества равных возможностей, основанного на верховенстве закона.</div></div>
+          <div class="term-card"><div class="term-name">Январские события (Кантар)</div><div class="term-def">Масштабные протесты и беспорядки в январе 2022 г. Стали триггером для реформ «Нового Казахстана».</div></div>
+          <div class="term-card"><div class="term-name">МФЦА</div><div class="term-def">Astana International Financial Center — финансовый хаб на основе английского общего права с независимым судом для привлечения иностранных инвестиций.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">Н</div><div><div class="person-name">Нурсултан Назарбаев</div><div class="person-desc">Первый президент (1991–2019). Принятие Декларации независимости, делимитация границ, введение тенге, стратегии «Казахстан-2030» и «Казахстан-2050».</div></div></div>
+          <div class="person-row"><div class="person-icon">Т</div><div><div class="person-name">Касым-Жомарт Токаев</div><div class="person-desc">Второй президент (с 2019 г.). Инициатор «слышащего государства», конституционных реформ 2022 г., курса на демонополизацию политики и экономики.</div></div></div>
+          <div class="person-row"><div class="person-icon">С</div><div><div class="person-name">Олжас Сулейменов</div><div class="person-desc">Антиядерное движение «Невада-Семипалатинск» (1989) подготовило почву для закрытия полигона и отказа от ядерного оружия.</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">16 декабря 1991 г.</div><div class="tl-event">Принятие Конституционного закона «О государственной независимости РК».</div></div>
+          <div class="tl-item"><div class="tl-date">2 марта 1992 г.</div><div class="tl-event">Вступление Казахстана в ООН.</div></div>
+          <div class="tl-item"><div class="tl-date">15 ноября 1993 г.</div><div class="tl-event">Введение национальной валюты — тенге.</div></div>
+          <div class="tl-item"><div class="tl-date">30 августа 1995 г.</div><div class="tl-event">Принятие действующей Конституции РК на референдуме.</div></div>
+          <div class="tl-item"><div class="tl-date">1997 г.</div><div class="tl-event">Перенос столицы в Акмолу (Астана). Стратегия «Казахстан-2030».</div></div>
+          <div class="tl-item"><div class="tl-date">2000 г.</div><div class="tl-event">Создание Национального фонда РК.</div></div>
+          <div class="tl-item"><div class="tl-date">2017 г.</div><div class="tl-event">EXPO-2017 в Астане («Энергия будущего»).</div></div>
+          <div class="tl-item"><div class="tl-date">Январь 2022 г.</div><div class="tl-event">«Кантар» — трагические события; начало реформ «Нового Казахстана».</div></div>
+          <div class="tl-item"><div class="tl-date">5 июня 2022 г.</div><div class="tl-event">Референдум по поправкам в Конституцию. Переход к более сбалансированной системе.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Содержание</h3>
+        <div class="content-block">
+          <div class="block-title">Экономические реформы</div>
+          <div class="block-text"><p><strong>Шоковая терапия (1992):</strong> Либерализация цен — рост в 17 раз за год. Ваучерная приватизация (не полностью успешная). <strong>Нефтяной бум 2000-х:</strong> Тенгиз, Кашаган, Карачаганак. ВВП на душу населения вырос с $700 до $14 000 к 2024 г. <strong>Цифровизация:</strong> Программа «Цифровой Казахстан» (2017) — egov.kz, Astana Hub.</p></div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Политическая трансформация</div>
+          <div class="block-text"><p>Переход от однопалатного Верховного Совета к двухпалатному парламенту (Сенат и Мажилис) в 1995 г. <strong>Реформы 2022 г.:</strong> Ограничение полномочий президента (один срок на 7 лет), воссоздание Конституционного Суда, смешанная избирательная система.</p></div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Социальная модернизация</div>
+          <div class="block-text"><p>Программа «Болашак» (1993) — обучение за рубежом. Ассамблея народа Казахстана (1995) — гармонизация интересов 130 этносов. Возвращение более 1 млн кандасов (оралманов). Реабилитация жертв репрессий и деятелей «Алаш».</p></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Lecture 9.txt -->
-    <div id="Lecture9" class="content-panel">
-        <div class="lecture-title">Лекция 9: Культурная политика в Казахстане</div>
-        
-        <div class="section-title">I. Термин — Определение</div>
-        <ul>
-            <li><strong>Культурная политика РК</strong> — государственная система мер, направленная на модернизацию, сохранение разнообразия и продвижение национальной идентичности.</li>
-            <li><strong>Мультикультурализм</strong> — концепция, предполагающая равное уважение ко всем этническим группам и отказ от насильственной ассимиляции.</li>
-            <li><strong>Глокализация</strong> — адаптация глобальных трендов к местным традициям (принцип «думай глобально, действуй локально»).</li>
-            <li><strong>Мәңгілік Ел</strong> — национальная идея Казахстана, базирующаяся на общественном согласии и исторической преемственности.</li>
-            <li><strong>Теория модернизации</strong> — селективная модель развития, гармонично сочетающая современные институты с национальным кодом.</li>
-            <li><strong>Культурный шок (стадии по К. Обергу):</strong>
-                <ul class="nested-list">
-                    <li>1. Медовый месяц (Honeymoon) — восторг от новой среды.</li>
-                    <li>2. Кризис / Шоковый этап (Crisis) — раздражение от барьеров и различий.</li>
-                    <li>3. Стадия регулировки (Adjustment) — постепенная адаптация и выравнивание рутины.</li>
-                    <li>4. Стадия мастерства (Mastery) — полное принятие новой культуры как своей.</li>
-                </ul>
-            </li>
-            <li><strong>Цифровой Казахстан</strong> — госпрограмма (2017), нацеленная на цифровую трансформацию экономики и развитие человеческого капитала.</li>
-        </ul>
-
-        <hr>
-
-        <div class="section-title">II. Личность — Вклад / Мнение</div>
-        <ul>
-            <li><strong>Роланд Робертсон</strong> — социолог, популяризировавший концепцию <strong>глокализации</strong>.</li>
-            <li><strong>Нурсултан Назарбаев</strong> — в 2014 году представил ценностный фундамент «Мәңгілік Ел».</li>
-            <li><strong>Калерво Оберг</strong> — антрополог, который ввёл в науку термин «культурный шок» и описал его фазы.</li>
-        </ul>
+    <!-- ══ ЛЕКЦИЯ 10 ══ -->
+    <div class="lecture" id="lec-10">
+      <div class="lec-header">
+        <span class="lec-num">10</span>
+        <h2 class="lec-title">Внешняя политика и международные отношения Республики Казахстан</h2>
+        <div class="lec-divider"></div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Ключевые термины и понятия</h3>
+        <div class="terms-grid">
+          <div class="term-card"><div class="term-name">Многовекторная внешняя политика</div><div class="term-def">Стратегический курс Казахстана: развитие равноправных отношений со всеми государствами и организациями без опоры на один центр силы.</div></div>
+          <div class="term-card"><div class="term-name">СВМДА (CICA)</div><div class="term-def">Совещание по взаимодействию и мерам доверия в Азии — международный форум, объединяющий 27–28 государств. Аналог ОБСЕ для Азии.</div></div>
+          <div class="term-card"><div class="term-name">Конвенция о правовом статусе Каспийского моря (2018 г.)</div><div class="term-def">Историческое соглашение пяти прибрежных стран: Каспий — водоём с особым правовым статусом (дно делится, поверхность в общем пользовании).</div></div>
+          <div class="term-card"><div class="term-name">ОТГ (Организация тюркских государств)</div><div class="term-def">Международная организация тюркоязычных стран для сотрудничества в политической, экономической и культурной сферах.</div></div>
+          <div class="term-card"><div class="term-name">ЕАЭС</div><div class="term-def">Евразийский экономический союз — интеграционное объединение, инициированное Казахстаном. Начало функционирования — 1 января 2015 г.</div></div>
+          <div class="term-card"><div class="term-name">G-Global</div><div class="term-def">Международная коммуникативная площадка, предложенная в 2012 г. для обсуждения глобальных проблем на принципах многополярности.</div></div>
+          <div class="term-card"><div class="term-name">Экономизация внешней политики</div><div class="term-def">Использование дипломатических инструментов для привлечения иностранных инвестиций, продвижения экспорта и интеграции в мировые рынки.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Персоналии</h3>
+        <div class="persons-list">
+          <div class="person-row"><div class="person-icon">Н</div><div><div class="person-name">Нурсултан Назарбаев</div><div class="person-desc">Автор стратегии многовекторности. Инициатор СВМДА (1992), идеи Евразийского союза (1994), G-Global. Организатор Съезда лидеров мировых религий.</div></div></div>
+          <div class="person-row"><div class="person-icon">Т</div><div><div class="person-name">Касым-Жомарт Токаев</div><div class="person-desc">Утвердил «Концепцию внешней политики на 2020–2030 гг.». В 2023 г. на ГА ООН выступил с предложениями по ядерному разоружению и продовольственной безопасности.</div></div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Хронология</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">29 августа 1991 г.</div><div class="tl-event">Указ о закрытии Семипалатинского ядерного полигона.</div></div>
+          <div class="tl-item"><div class="tl-date">1994 г.</div><div class="tl-event">Казахстан становится безъядерным государством — передача ядерного оружия России.</div></div>
+          <div class="tl-item"><div class="tl-date">Октябрь 1992 г.</div><div class="tl-event">На 47-й сессии ГА ООН предложена идея создания СВМДА.</div></div>
+          <div class="tl-item"><div class="tl-date">2001 г.</div><div class="tl-event">Создание Шанхайской организации сотрудничества (ШОС).</div></div>
+          <div class="tl-item"><div class="tl-date">2010 г.</div><div class="tl-event">Председательство Казахстана в ОБСЕ; Астанинский саммит ОБСЕ.</div></div>
+          <div class="tl-item"><div class="tl-date">1 января 2015 г.</div><div class="tl-event">Начало функционирования Евразийского экономического союза (ЕАЭС).</div></div>
+          <div class="tl-item"><div class="tl-date">2015 г.</div><div class="tl-event">Вступление в ВТО. Соглашение о расширенном партнёрстве с ЕС.</div></div>
+          <div class="tl-item"><div class="tl-date">12 августа 2018 г.</div><div class="tl-event">Подписание Конвенции о правовом статусе Каспийского моря.</div></div>
+          <div class="tl-item"><div class="tl-date">2023 г.</div><div class="tl-event">Председательство в СВМДА. 30-летие членства в ООН.</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Стратегические направления</h3>
+        <div class="content-block">
+          <div class="block-title">Партнёрства и союзы</div>
+          <div class="block-text">
+            <ul>
+              <li><strong>Россия:</strong> Главный стратегический союзник. ЕАЭС, ОДКБ, Байконур. Декларация о вечной дружбе (1998).</li>
+              <li><strong>Китай:</strong> Всестороннее стратегическое партнёрство. Казахстан — ключевой узел «Одного пояса, одного пути» (Срединный коридор).</li>
+              <li><strong>США:</strong> Расширенное стратегическое партнёрство. Энергетика, борьба с терроризмом, нераспространение ядерного оружия.</li>
+              <li><strong>ЕС:</strong> Крупнейший торговый партнёр и инвестор. Соглашение 2015 г. охватывает 29 сфер сотрудничества.</li>
+              <li><strong>Тюркский мир:</strong> Активное участие в ОТГ. Казахстан стремится к лидерству в ЦА.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="block-title">Ядерное разоружение и глобальные инициативы</div>
+          <div class="block-text"><p>Казахстан добровольно отказался от 4-го в мире ядерного арсенала. По инициативе РК 29 августа объявлено ООН Международным днём действий против ядерных испытаний. Конгресс лидеров мировых и традиционных религий (каждые 3 года) стал площадкой борьбы с экстремизмом.</p></div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title">Цитаты</h3>
+        <div class="quote-block">«Необходимо усилить международные усилия по ядерному разоружению и создать механизмы для предотвращения мировых продовольственных кризисов».<span class="quote-source">— К. Токаев на ГА ООН (2023)</span></div>
+        <div class="quote-block">«Эта политика не является погоней за всеми сразу, а представляет собой выверенный баланс интересов между глобальными гигантами».<span class="quote-source">— О многовекторности</span></div>
+        <div class="quote-block">В отличие от многих постсоветских стран, Казахстан с самого начала сделал ставку на <strong>политико-дипломатические</strong>, а не военные средства обеспечения своей безопасности.<span class="quote-source">— Важное отличие</span></div>
+      </div>
     </div>
 
-    <!-- Lecture 10.txt -->
-    <div id="Lecture10" class="content-panel">
-        <div class="lecture-title">Лекция 10: Казахская культура в контексте современных мировых процессов</div>
-        <p style="color: var(--text-muted); margin-bottom: 20px;">Конспект лекции полностью идентичен материалу Лекции 7. Используйте вкладку <strong>Lecture 7.txt</strong> для подробного изучения терминов, измерений CQ и вклада современных казахстанских художников (Сауле Сулейменовой, Рустама Хальфина и др.).</p>
-    </div>
-
+  </main>
 </div>
 
 <script>
-    function openTab(evt, tabId) {
-        // Прячем все панели контента
-        const panels = document.getElementsByClassName("content-panel");
-        for (let i = 0; i < panels.length; i++) {
-            panels[i].classList.remove("active");
-        }
-
-        // Убираем класс active у всех кнопок
-        const tabBtns = document.getElementsByClassName("tab-btn");
-        for (let i = 0; i < tabBtns.length; i++) {
-            tabBtns[i].classList.remove("active");
-        }
-
-        // Показываем нужную панель и делаем кнопку активной
-        document.getElementById(tabId).classList.add("active");
-        evt.currentTarget.classList.add("active");
-        
-        // Плавный скролл к началу контента при переключении
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  function show(n) {
+    document.querySelectorAll('.lecture').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('lec-' + n).classList.add('active');
+    document.querySelectorAll('.tab-btn')[n-1].classList.add('active');
+    document.querySelector('.content-area').scrollTop = 0;
+    window.scrollTo({ top: document.querySelector('.container').offsetTop - 10, behavior: 'smooth' });
+  }
 </script>
-
 </body>
 </html>
